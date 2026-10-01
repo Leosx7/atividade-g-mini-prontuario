@@ -1439,3 +1439,7 @@ ok 27 - mem├│ria: unicidade e refer├¬ncias n├úo s├úo ignoradas
 # todo 0
 # duration_ms 1672.9056
 ```
+
+## Validação de instalação limpa do pacote
+
+O ZIP foi extraído em pasta nova no Work. npm ci instalou 238 pacotes; setup gerou novos segredos sem exibição; Prisma generate, migrate deploy e seed passaram. O gate original, em repositório de validação local, passou 28/28, zero SKIP e gitleaks executado. As saídas estão em docs/evidencias/validacao-*.txt. A configuração e o banco dessa validação não entram no pacote. Biblioteca/faixas e arquivos protegidos foram comparados automaticamente à base em integridade-final.txt. Bundle Git verificou histórico completo; ZIP foi inspecionado para excluir .env, bancos e node_modules.

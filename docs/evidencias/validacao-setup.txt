@@ -1,0 +1,5 @@
+
+> mini-prontuario-t3@3.0.0 setup
+> tsx scripts/setup-env.ts
+
+.env preparado; valores existentes preservados e segredos nunca exibidos.

@@ -1,0 +1,6 @@
+public: intacto contra a base original
+tests/api.smoke.test.ts: intacto contra a base original
+gate.sh: intacto contra a base original
+database/schema.sql: intacto contra a base original
+Régua: três regras originais intactas, somente ARQ-6 acrescentada
+Bibliotecas e faixas de versões: mesmas da base, sem adições
