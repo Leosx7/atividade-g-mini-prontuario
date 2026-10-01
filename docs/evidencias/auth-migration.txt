@@ -1,0 +1,22 @@
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": SQLite database "prontuario-entrega.db" at "file:../database/prontuario-entrega.db"
+
+Applying migration `20261001001812_create_users`
+
+The following migration(s) have been created and applied from new schema changes:
+
+prisma\migrations/
+  ÔööÔöÇ 20261001001812_create_users/
+    ÔööÔöÇ migration.sql
+
+Your database is now in sync with your schema.
+
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[GÔ£ö Generated Prisma Client (v6.19.3) to .\node_modules\@prisma\client in 119ms
+
+

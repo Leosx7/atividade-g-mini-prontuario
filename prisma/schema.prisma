@@ -20,6 +20,8 @@ model Patient {
 }
 
 model Encounter {
+  professionalId Int?                @map("professional_id")
+  professional   User?               @relation(fields: [professionalId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   id             Int                 @id @default(autoincrement())
   patientId      Int                 @map("patient_id")
   startedAt      String              @map("started_at")
@@ -41,4 +43,15 @@ model MedicationRequest {
 
   @@index([encounterId], map: "idx_medreq_encounter")
   @@map("medication_requests")
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  passwordHash String      @map("password_hash")
+  role         String
+  encounters   Encounter[]
+
+  @@map("users")
 }

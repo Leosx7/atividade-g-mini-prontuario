@@ -1,0 +1,145 @@
+
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 1/4 Tipos (tsc --noEmit)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Ô£ö tipos ok
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 2/4 Arquitetura (dependency-cruiser)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Ô£ö no dependency violations found (46 modules, 122 dependencies cruised)
+
+Ô£ö regras de depend├¬ncia respeitadas
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 3/4 Testes de API (node:test, servidor real em porta ef├¬mera)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+TAP version 13
+# Subtest: GET /api/health responde 200 ok
+ok 1 - GET /api/health responde 200 ok
+  ---
+  duration_ms: 145.7939
+  type: 'test'
+  ...
+# Subtest: GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+ok 2 - GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+  ---
+  duration_ms: 11.1987
+  type: 'test'
+  ...
+# Subtest: GET /api/patients/:id inexistente -> 404 no contrato de erro
+ok 3 - GET /api/patients/:id inexistente -> 404 no contrato de erro
+  ---
+  duration_ms: 5.0687
+  type: 'test'
+  ...
+# Subtest: POST /api/patients v├ílido -> 201 com id gerado
+ok 4 - POST /api/patients v├ílido -> 201 com id gerado
+  ---
+  duration_ms: 34.7862
+  type: 'test'
+  ...
+# Subtest: POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+ok 5 - POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+  ---
+  duration_ms: 4.9605
+  type: 'test'
+  ...
+# Subtest: POST /api/patients com CNS duplicado -> 409 (invariante N1)
+ok 6 - POST /api/patients com CNS duplicado -> 409 (invariante N1)
+  ---
+  duration_ms: 19.8432
+  type: 'test'
+  ...
+# Subtest: Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+ok 7 - Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+  ---
+  duration_ms: 24.4332
+  type: 'test'
+  ...
+# Subtest: Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+ok 8 - Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+  ---
+  duration_ms: 57.5465
+  type: 'test'
+  ...
+# Subtest: Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+ok 9 - Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+  ---
+  duration_ms: 52.0001
+  type: 'test'
+  ...
+# Subtest: Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+ok 10 - Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+  ---
+  duration_ms: 3.8045
+  type: 'test'
+  ...
+# Subtest: setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+ok 11 - setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+  ---
+  duration_ms: 489.0021
+  type: 'test'
+  ...
+# Subtest: ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+ok 12 - ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+  ---
+  duration_ms: 3.4687
+  type: 'test'
+  ...
+# Subtest: ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+ok 13 - ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+  ---
+  duration_ms: 55.6356
+  type: 'test'
+  ...
+# Subtest: ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+ok 14 - ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+  ---
+  duration_ms: 53.5702
+  type: 'test'
+  ...
+# Subtest: ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+ok 15 - ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+  ---
+  duration_ms: 60.8419
+  type: 'test'
+  ...
+# Subtest: ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+ok 16 - ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+  ---
+  duration_ms: 44.1197
+  type: 'test'
+  ...
+# Subtest: ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+  ---
+  duration_ms: 189.2414
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2115.115
+Ô£ö testes verdes
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 4/4 Segredos no reposit├│rio (gitleaks)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+9:18PM INF 3 commits scanned.
+9:18PM INF scanned ~912263 bytes (912.26 KB) in 203ms
+9:18PM INF no leaks found
+Ô£ö nenhum segredo detectado
+
+==============================================
+GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)

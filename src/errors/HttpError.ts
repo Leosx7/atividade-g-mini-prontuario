@@ -55,17 +55,9 @@ export class PayloadTooLargeError extends HttpError {
   }
 }
 
-/* ------------------------------------------------------------
-   TODO AUTH-1 — Os dois erros da identidade
-   ------------------------------------------------------------
-   A trilha AUTH precisa de dois status novos — e eles NÃO são
-   sinônimos:
-
-     401 Unauthorized  -> "não sei QUEM você é"
-                          (sem token, token inválido, token expirado)
-     403 Forbidden     -> "sei quem você é, e você NÃO PODE"
-                          (papel sem permissão para esta porta)
-
-   Crie aqui `UnauthorizedError` (401) e `ForbiddenError` (403),
-   seguindo exatamente o padrão das classes acima.
-   ------------------------------------------------------------ */
+export class UnauthorizedError extends HttpError {
+  constructor(message = "Autenticação necessária.") { super(401, message); }
+}
+export class ForbiddenError extends HttpError {
+  constructor(message = "Você não tem permissão para esta ação.") { super(403, message); }
+}

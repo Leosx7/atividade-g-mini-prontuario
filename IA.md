@@ -418,3 +418,204 @@ ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve n
 ==============================================
 GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
 ```
+
+## Tarefa: AUTH-1..8 e matriz · Trilha: AUTH · Rota: agente
+- **Ferramenta/modelo:** Codex; revisão independente em contexto novo.
+- **Goal:** implementar identidade, Argon2id, JWT, register/login/me, matriz e autoria da prescrição.
+- **Context:** matriz dos PDFs, erros e validação existentes, Prisma e ports, testes de ataque.
+- **Constraints:** frontend e smoke intactos; migrations já aplicadas imutáveis; segredos apenas .env; autorização de autoria no service; não expor senha/hash no JWT ou JSON.
+- **Done when:** 7 ataques originais ativos sem SKIP; gate completo verde; casos da matriz e JWT inválidos/expirados comprovados.
+- **Plano editado?** Separada montagem de regressão aberta da montagem protegida do servidor. tests/helpers.ts seleciona a montagem explicitamente; tests/api.smoke.test.ts permanece byte a byte original. A suíte de ataques usa a mesma composição do servidor. Corrigido o skip calculado antes do hook before no teste fornecido: ataques agora são obrigatórios e ausência de login falha.
+- **Revisão adversarial:** aceito P1: erro de JSON malformado carregava corpo bruto para console.error; central agora traduz parsing para 400 e não registra corpo/credenciais, com teste. Aceita melhoria Argon2 fictício para e-mail inexistente, reduzindo diferença temporal. Mantido cadastro público dos papéis por ser contrato explícito didático; restrição de concessão de papéis em ambiente real fica documentada. Mantido serviço estático de fotos, contrato preexistente fora do frontend congelado; proteção de fotos em implantação real é limitação registrada, não alteração escondida. Não implementar revogação/versionamento de papéis: não há troca de papel no escopo aprovado. Esta triagem técnica é do agente e não substitui avaliação pessoal do aluno.
+- **O que EU decidi:** usuário autorizou migrations/AUTH/plano completo. Não atribuir análise pessoal dos achados ao aluno sem confirmação de leitura.
+- **Evidência de pronto:** migration em docs/evidencias/auth-migration.txt; gate inicial 17/17; gate revisado 24/24, zero SKIP. Saída revisada integral abaixo.
+
+```text
+
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 1/4 Tipos (tsc --noEmit)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Ô£ö tipos ok
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 2/4 Arquitetura (dependency-cruiser)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Ô£ö no dependency violations found (46 modules, 123 dependencies cruised)
+
+Ô£ö regras de depend├¬ncia respeitadas
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 3/4 Testes de API (node:test, servidor real em porta ef├¬mera)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+TAP version 13
+# Subtest: GET /api/health responde 200 ok
+ok 1 - GET /api/health responde 200 ok
+  ---
+  duration_ms: 95.2268
+  type: 'test'
+  ...
+# Subtest: GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+ok 2 - GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+  ---
+  duration_ms: 18.8645
+  type: 'test'
+  ...
+# Subtest: GET /api/patients/:id inexistente -> 404 no contrato de erro
+ok 3 - GET /api/patients/:id inexistente -> 404 no contrato de erro
+  ---
+  duration_ms: 13.9061
+  type: 'test'
+  ...
+# Subtest: POST /api/patients v├ílido -> 201 com id gerado
+ok 4 - POST /api/patients v├ílido -> 201 com id gerado
+  ---
+  duration_ms: 56.0307
+  type: 'test'
+  ...
+# Subtest: POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+ok 5 - POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+  ---
+  duration_ms: 16.1128
+  type: 'test'
+  ...
+# Subtest: POST /api/patients com CNS duplicado -> 409 (invariante N1)
+ok 6 - POST /api/patients com CNS duplicado -> 409 (invariante N1)
+  ---
+  duration_ms: 23
+  type: 'test'
+  ...
+# Subtest: Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+ok 7 - Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+  ---
+  duration_ms: 33.0514
+  type: 'test'
+  ...
+# Subtest: Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+ok 8 - Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+  ---
+  duration_ms: 35.8601
+  type: 'test'
+  ...
+# Subtest: Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+ok 9 - Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+  ---
+  duration_ms: 36.8603
+  type: 'test'
+  ...
+# Subtest: Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+ok 10 - Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+  ---
+  duration_ms: 9.7481
+  type: 'test'
+  ...
+# Subtest: setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+ok 11 - setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+  ---
+  duration_ms: 353.9157
+  type: 'test'
+  ...
+# Subtest: ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+ok 12 - ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+  ---
+  duration_ms: 7.8943
+  type: 'test'
+  ...
+# Subtest: ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+ok 13 - ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+  ---
+  duration_ms: 89.8678
+  type: 'test'
+  ...
+# Subtest: ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+ok 14 - ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+  ---
+  duration_ms: 95.3863
+  type: 'test'
+  ...
+# Subtest: ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+ok 15 - ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+  ---
+  duration_ms: 79.2006
+  type: 'test'
+  ...
+# Subtest: ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+ok 16 - ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+  ---
+  duration_ms: 57.1395
+  type: 'test'
+  ...
+# Subtest: ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+  ---
+  duration_ms: 159.988
+  type: 'test'
+  ...
+# Subtest: matriz: todas as portas de dados exigem token
+ok 18 - matriz: todas as portas de dados exigem token
+  ---
+  duration_ms: 672.7076
+  type: 'test'
+  ...
+# Subtest: matriz completa de leitura, cria├º├úo, upload e prescri├º├úo
+ok 19 - matriz completa de leitura, cria├º├úo, upload e prescri├º├úo
+  ---
+  duration_ms: 170.5474
+  type: 'test'
+  ...
+# Subtest: JWT expirado, sem expira├º├úo, algoritmo diferente e payload inv├ílido recebem 401
+ok 20 - JWT expirado, sem expira├º├úo, algoritmo diferente e payload inv├ílido recebem 401
+  ---
+  duration_ms: 6.4941
+  type: 'test'
+  ...
+# Subtest: registro duplicado e normaliza├º├úo de e-mail; login curto responde 401 gen├®rico
+ok 21 - registro duplicado e normaliza├º├úo de e-mail; login curto responde 401 gen├®rico
+  ---
+  duration_ms: 87.5194
+  type: 'test'
+  ...
+# Subtest: upload maior que 2MB preserva 413 e contrato de erro
+ok 22 - upload maior que 2MB preserva 413 e contrato de erro
+  ---
+  duration_ms: 13.3391
+  type: 'test'
+  ...
+# Subtest: JSON malformado de AUTH responde 400 sem registrar corpo ou credenciais
+ok 23 - JSON malformado de AUTH responde 400 sem registrar corpo ou credenciais
+  ---
+  duration_ms: 4.148
+  type: 'test'
+  ...
+# Subtest: cadastros concorrentes com o mesmo e-mail preservam 201/409
+ok 24 - cadastros concorrentes com o mesmo e-mail preservam 201/409
+  ---
+  duration_ms: 95.16
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1780.6349
+Ô£ö testes verdes
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 4/4 Segredos no reposit├│rio (gitleaks)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+9:21PM INF 3 commits scanned.
+9:21PM INF scanned ~912263 bytes (912.26 KB) in 200ms
+9:21PM INF no leaks found
+Ô£ö nenhum segredo detectado
+
+==============================================
+GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
+```

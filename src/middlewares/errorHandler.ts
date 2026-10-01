@@ -22,6 +22,17 @@ export function errorHandler(
   // Remover este parâmetro "inútil" quebra tudo silenciosamente.
   _next: NextFunction,
 ) {
+  // body-parser inclui o corpo original no erro: jamais registrar credenciais.
+  if (typeof error === "object" && error !== null && "type" in error) {
+    if (error.type === "entity.parse.failed") {
+      response.status(400).json({ error: { message: "JSON inválido no corpo da requisição.", statusCode: 400, details: null } });
+      return;
+    }
+    if (error.type === "entity.too.large") {
+      response.status(413).json({ error: { message: "Corpo da requisição excede o limite permitido.", statusCode: 413, details: null } });
+      return;
+    }
+  }
   if (error instanceof HttpError) {
     response.status(error.statusCode).json({
       error: {
@@ -49,7 +60,7 @@ export function errorHandler(
   // Erro que não conhecemos = bug nosso. O cliente recebe um 500
   // genérico; o DETALHE fica no log do servidor, nunca na resposta
   // (mensagem de stack para fora é presente para atacante).
-  console.error("[erro não tratado]", error);
+  console.error("[erro não tratado]", { name: error instanceof Error ? error.name : "UnknownError" });
   response.status(500).json({
     error: { message: "Erro interno do servidor.", statusCode: 500, details: null },
   });

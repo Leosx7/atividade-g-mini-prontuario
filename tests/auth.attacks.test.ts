@@ -20,7 +20,6 @@ import { startServer, jsonRequest, randomCns } from "./helpers";
 let base = "";
 let server: Server;
 let api: ReturnType<typeof jsonRequest>;
-let authPronta = false;
 
 // Credenciais de TESTE (criadas aqui mesmo, via register).
 // Nada disso é segredo real — segredo real vive no .env (OP-2).
@@ -39,16 +38,16 @@ const RECEPCAO = {
 };
 
 before(async () => {
-  ({ base, server } = await startServer());
+  ({ base, server } = await startServer({ auth: true }));
   api = jsonRequest(base);
   const probe = await api("/api/auth/login", { method: "POST", body: "{}" });
-  authPronta = probe.status !== 404;
+  assert.notEqual(probe.status, 404, "AUTH deve estar implementada: testes de ataque não podem ser pulados.");
 });
 
 after(() => server.close());
 
 function quandoAuthExistir(name: string, fn: () => Promise<void>) {
-  test(name, { skip: !authPronta ? "trilha AUTH ainda não implementada" : false }, fn);
+  test(name, fn);
 }
 
 async function login(credentials: { email: string; password: string }): Promise<string> {
