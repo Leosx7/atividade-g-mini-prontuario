@@ -15,6 +15,7 @@ export class EncountersService {
     return (await this.repository.findByPatient(patientId)).map(publicEncounter);
   }
   async getEncounterById(id: number) {
+    if (!Number.isInteger(id) || id < 1) throw new NotFoundError("Atendimento não encontrado.");
     const encounter = await this.repository.findById(id);
     if (!encounter) throw new NotFoundError("Atendimento não encontrado.");
     return encounter;

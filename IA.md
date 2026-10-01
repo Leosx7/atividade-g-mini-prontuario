@@ -1035,3 +1035,407 @@ ok 27 - seed aborta colis├úo de identidade sem anexar registros fict├¡cios
 ==============================================
 GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
 ```
+
+## Tarefa: preservação final de IDs e validação do pacote · Trilha: ORM · Rota: agente
+- **Goal:** preservar o 404 do SQLite para IDs não numéricos, evitando 500 do validador Prisma, e verificar a instalação do pacote.
+- **Context:** contrato original de getPatientById/getEncounterById; código final e smoke congelado.
+- **Constraints:** sem alterar frontend, smoke, gate, migrations aplicadas ou bibliotecas.
+- **Done when:** teste de IDs inválidos passa, gate 28/28 e memória 27/27 sem SKIP; conteúdo do ZIP e instalação conferidos.
+- **Plano editado?** Confirmado em SQLite em memória: SELECT com NaN retorna undefined. Acrescentadas guardas de inteiro positivo nos dois services e teste HTTP, preservando 404. Preparação de pacote feita a partir da raiz Git: primeira tentativa de git archive na subpasta produziu arquivo vazio, detectado na validação e corrigido antes da entrega. Snapshot correto contém package.json e fontes; npm ci em cópia nova passou com as 238 dependências da base.
+- **Revisão:** revisões por trilha já registradas; esta correção preserva contrato e tem teste específico. Sem fabricação de aprovação pessoal do aluno.
+- **O que EU decidi:** usuário pediu entrega completa; agente corrigiu a regressão antes de empacotar. Original, banco de testes e banco de demonstração seguem separados e preservados.
+- **Evidência final atualizada:** saída real completa abaixo; execuções anteriores ficam preservadas como histórico.
+
+```text
+
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 1/4 Tipos (tsc --noEmit)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Ô£ö tipos ok
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 2/4 Arquitetura (dependency-cruiser)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Ô£ö no dependency violations found (47 modules, 134 dependencies cruised)
+
+Ô£ö regras de depend├¬ncia respeitadas
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 3/4 Testes de API (node:test, servidor real em porta ef├¬mera)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+TAP version 13
+# Subtest: GET /api/health responde 200 ok
+ok 1 - GET /api/health responde 200 ok
+  ---
+  duration_ms: 106.1806
+  type: 'test'
+  ...
+# Subtest: GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+ok 2 - GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+  ---
+  duration_ms: 22.4857
+  type: 'test'
+  ...
+# Subtest: GET /api/patients/:id inexistente -> 404 no contrato de erro
+ok 3 - GET /api/patients/:id inexistente -> 404 no contrato de erro
+  ---
+  duration_ms: 13.4653
+  type: 'test'
+  ...
+# Subtest: POST /api/patients v├ílido -> 201 com id gerado
+ok 4 - POST /api/patients v├ílido -> 201 com id gerado
+  ---
+  duration_ms: 66.3198
+  type: 'test'
+  ...
+# Subtest: POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+ok 5 - POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+  ---
+  duration_ms: 9.3288
+  type: 'test'
+  ...
+# Subtest: POST /api/patients com CNS duplicado -> 409 (invariante N1)
+ok 6 - POST /api/patients com CNS duplicado -> 409 (invariante N1)
+  ---
+  duration_ms: 36.0297
+  type: 'test'
+  ...
+# Subtest: Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+ok 7 - Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+  ---
+  duration_ms: 71.6981
+  type: 'test'
+  ...
+# Subtest: Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+ok 8 - Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+  ---
+  duration_ms: 30.8093
+  type: 'test'
+  ...
+# Subtest: Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+ok 9 - Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+  ---
+  duration_ms: 52.5378
+  type: 'test'
+  ...
+# Subtest: Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+ok 10 - Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+  ---
+  duration_ms: 8.1631
+  type: 'test'
+  ...
+# Subtest: setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+ok 11 - setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+  ---
+  duration_ms: 459.2376
+  type: 'test'
+  ...
+# Subtest: ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+ok 12 - ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+  ---
+  duration_ms: 6.421
+  type: 'test'
+  ...
+# Subtest: ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+ok 13 - ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+  ---
+  duration_ms: 94.6759
+  type: 'test'
+  ...
+# Subtest: ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+ok 14 - ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+  ---
+  duration_ms: 98.2256
+  type: 'test'
+  ...
+# Subtest: ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+ok 15 - ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+  ---
+  duration_ms: 101.2529
+  type: 'test'
+  ...
+# Subtest: ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+ok 16 - ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+  ---
+  duration_ms: 62.9582
+  type: 'test'
+  ...
+# Subtest: ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+  ---
+  duration_ms: 279.2178
+  type: 'test'
+  ...
+# Subtest: matriz: todas as portas de dados exigem token
+ok 18 - matriz: todas as portas de dados exigem token
+  ---
+  duration_ms: 807.6454
+  type: 'test'
+  ...
+# Subtest: matriz completa de leitura, cria├º├úo, upload e prescri├º├úo
+ok 19 - matriz completa de leitura, cria├º├úo, upload e prescri├º├úo
+  ---
+  duration_ms: 234.2488
+  type: 'test'
+  ...
+# Subtest: JWT expirado, sem expira├º├úo, algoritmo diferente e payload inv├ílido recebem 401
+ok 20 - JWT expirado, sem expira├º├úo, algoritmo diferente e payload inv├ílido recebem 401
+  ---
+  duration_ms: 7.6743
+  type: 'test'
+  ...
+# Subtest: registro duplicado e normaliza├º├úo de e-mail; login curto responde 401 gen├®rico
+ok 21 - registro duplicado e normaliza├º├úo de e-mail; login curto responde 401 gen├®rico
+  ---
+  duration_ms: 128.0172
+  type: 'test'
+  ...
+# Subtest: upload maior que 2MB preserva 413 e contrato de erro
+ok 22 - upload maior que 2MB preserva 413 e contrato de erro
+  ---
+  duration_ms: 12.8987
+  type: 'test'
+  ...
+# Subtest: JSON malformado de AUTH responde 400 sem registrar corpo ou credenciais
+ok 23 - JSON malformado de AUTH responde 400 sem registrar corpo ou credenciais
+  ---
+  duration_ms: 4.1827
+  type: 'test'
+  ...
+# Subtest: cadastros concorrentes com o mesmo e-mail preservam 201/409
+ok 24 - cadastros concorrentes com o mesmo e-mail preservam 201/409
+  ---
+  duration_ms: 129.8488
+  type: 'test'
+  ...
+# Subtest: IDs n├úo num├®ricos preservam 404 e n├úo viram erro de valida├º├úo Prisma 500
+ok 25 - IDs n├úo num├®ricos preservam 404 e n├úo viram erro de valida├º├úo Prisma 500
+  ---
+  duration_ms: 17.0788
+  type: 'test'
+  ...
+# Subtest: mem├│ria: inst├óncias isoladas e c├│pias impedem muta├º├úo externa
+ok 26 - mem├│ria: inst├óncias isoladas e c├│pias impedem muta├º├úo externa
+  ---
+  duration_ms: 1.6288
+  type: 'test'
+  ...
+# Subtest: mem├│ria: unicidade e refer├¬ncias n├úo s├úo ignoradas
+ok 27 - mem├│ria: unicidade e refer├¬ncias n├úo s├úo ignoradas
+  ---
+  duration_ms: 1.9845
+  type: 'test'
+  ...
+# Subtest: seed aborta colis├úo de identidade sem anexar registros fict├¡cios
+ok 28 - seed aborta colis├úo de identidade sem anexar registros fict├¡cios
+  ---
+  duration_ms: 2370.591
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2681.8789
+Ô£ö testes verdes
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 4/4 Segredos no reposit├│rio (gitleaks)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+9:40PM INF 5 commits scanned.
+9:40PM INF scanned ~1031852 bytes (1.03 MB) in 264ms
+9:40PM INF no leaks found
+Ô£ö nenhum segredo detectado
+
+==============================================
+GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
+```
+
+**Memória após a correção:**
+```text
+
+> mini-prontuario-t3@3.0.0 test:memory
+> tsx scripts/test-memory.ts
+
+TAP version 13
+# Subtest: GET /api/health responde 200 ok
+ok 1 - GET /api/health responde 200 ok
+  ---
+  duration_ms: 54.3695
+  type: 'test'
+  ...
+# Subtest: GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+ok 2 - GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+  ---
+  duration_ms: 6.1715
+  type: 'test'
+  ...
+# Subtest: GET /api/patients/:id inexistente -> 404 no contrato de erro
+ok 3 - GET /api/patients/:id inexistente -> 404 no contrato de erro
+  ---
+  duration_ms: 3.8025
+  type: 'test'
+  ...
+# Subtest: POST /api/patients v├ílido -> 201 com id gerado
+ok 4 - POST /api/patients v├ílido -> 201 com id gerado
+  ---
+  duration_ms: 23.4239
+  type: 'test'
+  ...
+# Subtest: POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+ok 5 - POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+  ---
+  duration_ms: 4.921
+  type: 'test'
+  ...
+# Subtest: POST /api/patients com CNS duplicado -> 409 (invariante N1)
+ok 6 - POST /api/patients com CNS duplicado -> 409 (invariante N1)
+  ---
+  duration_ms: 5.6609
+  type: 'test'
+  ...
+# Subtest: Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+ok 7 - Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+  ---
+  duration_ms: 11.019
+  type: 'test'
+  ...
+# Subtest: Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+ok 8 - Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+  ---
+  duration_ms: 12.4811
+  type: 'test'
+  ...
+# Subtest: Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+ok 9 - Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+  ---
+  duration_ms: 25.9846
+  type: 'test'
+  ...
+# Subtest: Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+ok 10 - Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+  ---
+  duration_ms: 8.6445
+  type: 'test'
+  ...
+# Subtest: setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+ok 11 - setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+  ---
+  duration_ms: 309.8298
+  type: 'test'
+  ...
+# Subtest: ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+ok 12 - ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+  ---
+  duration_ms: 6.9582
+  type: 'test'
+  ...
+# Subtest: ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+ok 13 - ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+  ---
+  duration_ms: 77.5818
+  type: 'test'
+  ...
+# Subtest: ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+ok 14 - ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+  ---
+  duration_ms: 74.7985
+  type: 'test'
+  ...
+# Subtest: ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+ok 15 - ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+  ---
+  duration_ms: 72.0517
+  type: 'test'
+  ...
+# Subtest: ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+ok 16 - ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+  ---
+  duration_ms: 57.2496
+  type: 'test'
+  ...
+# Subtest: ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+  ---
+  duration_ms: 176.3608
+  type: 'test'
+  ...
+# Subtest: matriz: todas as portas de dados exigem token
+ok 18 - matriz: todas as portas de dados exigem token
+  ---
+  duration_ms: 594.3813
+  type: 'test'
+  ...
+# Subtest: matriz completa de leitura, cria├º├úo, upload e prescri├º├úo
+ok 19 - matriz completa de leitura, cria├º├úo, upload e prescri├º├úo
+  ---
+  duration_ms: 69.3002
+  type: 'test'
+  ...
+# Subtest: JWT expirado, sem expira├º├úo, algoritmo diferente e payload inv├ílido recebem 401
+ok 20 - JWT expirado, sem expira├º├úo, algoritmo diferente e payload inv├ílido recebem 401
+  ---
+  duration_ms: 10.0822
+  type: 'test'
+  ...
+# Subtest: registro duplicado e normaliza├º├úo de e-mail; login curto responde 401 gen├®rico
+ok 21 - registro duplicado e normaliza├º├úo de e-mail; login curto responde 401 gen├®rico
+  ---
+  duration_ms: 127.7015
+  type: 'test'
+  ...
+# Subtest: upload maior que 2MB preserva 413 e contrato de erro
+ok 22 - upload maior que 2MB preserva 413 e contrato de erro
+  ---
+  duration_ms: 13.0809
+  type: 'test'
+  ...
+# Subtest: JSON malformado de AUTH responde 400 sem registrar corpo ou credenciais
+ok 23 - JSON malformado de AUTH responde 400 sem registrar corpo ou credenciais
+  ---
+  duration_ms: 5.1356
+  type: 'test'
+  ...
+# Subtest: cadastros concorrentes com o mesmo e-mail preservam 201/409
+ok 24 - cadastros concorrentes com o mesmo e-mail preservam 201/409
+  ---
+  duration_ms: 67.703
+  type: 'test'
+  ...
+# Subtest: IDs n├úo num├®ricos preservam 404 e n├úo viram erro de valida├º├úo Prisma 500
+ok 25 - IDs n├úo num├®ricos preservam 404 e n├úo viram erro de valida├º├úo Prisma 500
+  ---
+  duration_ms: 15.4328
+  type: 'test'
+  ...
+# Subtest: mem├│ria: inst├óncias isoladas e c├│pias impedem muta├º├úo externa
+ok 26 - mem├│ria: inst├óncias isoladas e c├│pias impedem muta├º├úo externa
+  ---
+  duration_ms: 1.1668
+  type: 'test'
+  ...
+# Subtest: mem├│ria: unicidade e refer├¬ncias n├úo s├úo ignoradas
+ok 27 - mem├│ria: unicidade e refer├¬ncias n├úo s├úo ignoradas
+  ---
+  duration_ms: 1.2097
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1672.9056
+```

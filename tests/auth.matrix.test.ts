@@ -97,3 +97,11 @@ test("cadastros concorrentes com o mesmo e-mail preservam 201/409", async () => 
   const responses = await Promise.all([1, 2].map(() => api("/api/auth/register", { method: "POST", body: JSON.stringify(input) })));
   assert.deepEqual(responses.map(response => response.status).sort(), [201, 409]);
 });
+
+test("IDs não numéricos preservam 404 e não viram erro de validação Prisma 500", async () => {
+  for (const id of ["invalido", "0", "1.5", "-1"]) {
+    assert.equal((await requestAs("profissional", `/api/patients/${id}`)).status, 404);
+    assert.equal((await requestAs("profissional", `/api/patients/${id}/encounters`)).status, 404);
+    assert.equal((await requestAs("profissional", `/api/encounters/${id}/medications`)).status, 404);
+  }
+});

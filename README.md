@@ -92,7 +92,7 @@ No **registro**, a senha mínima é uma regra para criar uma credencial aceitáv
 
 - Saídas reais e completas por trilha em `docs/evidencias/` e no `IA.md`.
 - `auth-requests-a1-a7.txt`: 201, 200, 401, 401, 403, 401 e 401.
-- `n3-memory-tests.txt`: 26 testes, 26 passaram, zero falhas e SKIP.
+- `n3-memory-final.txt`: smoke, ataques, matriz e contratos repetidos em memória, zero falhas e SKIP.
 - `gate-final.txt`: resultado final com Prisma, sem checagem de segredos pulada.
 - `ui-login.png` e `ui-autenticada.png`: login real no Chrome headless usando frontend original e dados fictícios.
 - Verificação contra a base original: `public/`, `tests/api.smoke.test.ts`, `gate.sh` e `database/schema.sql` intactos; régua original somente acrescida de ARQ-6.
@@ -112,3 +112,7 @@ A decisão técnica mais delicada do projeto foi manter os testes de regressão 
 Na revisão assistida, foi corrigido o risco de o seed anexar registros fictícios a identidades diferentes com IDs coincidentes. Também foi corrigido o logger que poderia divulgar credenciais em JSON malformado. A proposta de mudar Prisma apenas por depreciação foi recusada tecnicamente por não resolver um defeito da atividade e ampliar a troca de versão; os alertas concretos do audit ficaram registrados, sem afirmar que não existem. Esta triagem foi preparada pelo agente e deve ser lida criticamente pelo aluno antes da entrega.
 
 Começando novamente, eu planejaria desde o início o ciclo de vida dos clients, o banco descartável de validação e o seed com identidade explícita. Manteria commits por trilha, gates com saídas reais e revisões independentes, pois a separação entre uma afirmação de funcionamento e uma prova executável foi o principal aprendizado do trabalho. Este texto-base não substitui a explicação pessoal do código e a validação crítica exigidas pela disciplina.
+
+## Recebimento do código
+
+O ZIP contém os arquivos do projeto; o arquivo `.bundle` separado preserva o histórico Git do repositório completo. Para restaurar o histórico: `git clone Historico_Atividade_G.bundle atividade-g`, depois abrir `atividade-g/topico3/base-mini-prontuario-t3`. Em checkout Git, o gate original verifica também segredos no histórico. Um ZIP extraído não contém `.git`: restaure pelo bundle para essa checagem, ou inicialize um repositório de validação local. Não editar o gate para dispensar o Git.

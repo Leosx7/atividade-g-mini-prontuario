@@ -6,6 +6,7 @@ export class PatientsService {
   constructor(private readonly repository: PatientsRepository) {}
   listPatients() { return this.repository.findAll(); }
   async getPatientById(id: number) {
+    if (!Number.isInteger(id) || id < 1) throw new NotFoundError("Paciente não encontrado.");
     const patient = await this.repository.findById(id);
     if (!patient) throw new NotFoundError("Paciente não encontrado.");
     return patient;
