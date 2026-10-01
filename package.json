@@ -10,7 +10,9 @@
     "check": "tsc --noEmit",
     "arch": "depcruise src --config .dependency-cruiser.cjs",
     "test": "tsx --test tests/*.test.ts",
-    "gate": "bash gate.sh"
+    "gate": "bash gate.sh",
+    "setup": "tsx scripts/setup-env.ts",
+    "db:seed": "tsx scripts/seed-db.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.16.1",
@@ -32,5 +34,8 @@
     "prisma": "^6.16.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
+  },
+  "prisma": {
+    "seed": "tsx scripts/seed-db.ts"
   }
 }

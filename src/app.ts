@@ -1,3 +1,4 @@
+import { createPrismaRepositories } from "./repositories/prisma.repositories";
 import express from "express";
 import { createPatientsRouter } from "./routes/patients.routes";
 import { createEncountersRouter } from "./routes/encounters.routes";
@@ -9,9 +10,9 @@ import { createMedicationsController } from "./controllers/medications.controlle
 import { PatientsService } from "./services/patients.service";
 import { EncountersService } from "./services/encounters.service";
 import { MedicationsService } from "./services/medications.service";
-import { SqlitePatientsRepository, type PatientsRepository } from "./repositories/patients.repository";
-import { SqliteEncountersRepository, type EncountersRepository } from "./repositories/encounters.repository";
-import { SqliteMedicationsRepository, type MedicationsRepository } from "./repositories/medications.repository";
+import type { PatientsRepository } from "./repositories/patients.repository";
+import type { EncountersRepository } from "./repositories/encounters.repository";
+import type { MedicationsRepository } from "./repositories/medications.repository";
 import { errorHandler } from "./middlewares/errorHandler";
 
 export type Repositories = { patients: PatientsRepository; encounters: EncountersRepository; medications: MedicationsRepository };
@@ -32,4 +33,6 @@ export function createApp(repositories: Repositories) {
   app.use(errorHandler);
   return app;
 }
-export const app = createApp({ patients: new SqlitePatientsRepository(), encounters: new SqliteEncountersRepository(), medications: new SqliteMedicationsRepository() });
+const repositories = createPrismaRepositories();
+export const app = createApp(repositories);
+export const close = repositories.close;

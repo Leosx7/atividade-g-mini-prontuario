@@ -1,22 +1,5 @@
-/**
- * Recria o banco do zero: apaga as tabelas, cria de novo e insere
- * os dados de teste.  Uso:  npm run db:reset
- *
- * ATENÇÃO: depois que a trilha ORM criar migrations do Prisma,
- * este script vira legado — o caminho passa a ser
- * `npx prisma migrate reset` (invariante OP-1).
- */
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { db, DATABASE_FILE } from "../src/repositories/sqlite.database";
-
-const schema = readFileSync(join(process.cwd(), "database", "schema.sql"), "utf8");
-const seed = readFileSync(join(process.cwd(), "database", "seed.sql"), "utf8");
-
-db.exec(schema);
-db.exec(seed);
-
-const total = db.prepare("SELECT COUNT(*) AS total FROM patients").get() as { total: number };
-
-console.log(`Banco recriado em ${DATABASE_FILE}`);
-console.log(`Pacientes inseridos: ${total.total}`);
+import { spawnSync } from "node:child_process";
+import { resolve } from "node:path";
+// Desde ORM, recriar o esquema é responsabilidade exclusiva das migrations.
+const result = spawnSync(process.execPath, [resolve("node_modules/prisma/build/index.js"), "migrate", "reset", "--force"], { stdio: "inherit" });
+process.exitCode = result.status ?? 1;

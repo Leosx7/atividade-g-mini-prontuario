@@ -1,19 +1,9 @@
-/**
- * Conexão única com o banco SQLite (better-sqlite3).
- *
- * Este arquivo é INFRAESTRUTURA. Pela Regra da Dependência, só a
- * borda do sistema pode conhecê-lo — hoje, os Services (e, depois
- * da trilha ARQ, apenas os Repositories).
- *
- * Na trilha ORM ele será aposentado em favor do Prisma Client —
- * e, se a arquitetura estiver certa, NENHUM service perceberá.
- */
+import "dotenv/config";
 import Database from "better-sqlite3";
-import { join } from "node:path";
-
-export const DATABASE_FILE = join(process.cwd(), "database", "prontuario.db");
-
+import { resolve } from "node:path";
+// Adapters SQLite e Prisma respeitam a mesma URL, relativa à pasta prisma/.
+const url = process.env.DATABASE_URL ?? "file:../database/prontuario-entrega.db";
+if (!url.startsWith("file:")) throw new Error("SQLite exige DATABASE_URL file:.");
+export const DATABASE_FILE = resolve(process.cwd(), "prisma", url.slice(5));
 export const db = new Database(DATABASE_FILE);
-
-// SQLite não aplica chave estrangeira por padrão. Isso liga a verificação.
 db.pragma("foreign_keys = ON");

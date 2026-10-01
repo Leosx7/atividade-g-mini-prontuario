@@ -1,0 +1,91 @@
+
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 1/4 Tipos (tsc --noEmit)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+src/repositories/prisma.repositories.ts(22,35): error TS2339: Property 'PrismaClientKnownRequestError' does not exist on type 'typeof Prisma'.
+src/repositories/prisma.repositories.ts(22,68): error TS18046: 'error' is of type 'unknown'.
+Ô£ÿ erros de tipo
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 2/4 Arquitetura (dependency-cruiser)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Ô£ö no dependency violations found (37 modules, 86 dependencies cruised)
+
+Ô£ö regras de depend├¬ncia respeitadas
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 3/4 Testes de API (node:test, servidor real em porta ef├¬mera)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+TAP version 13
+# C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\node_modules\\.prisma\\client\\default.js:43
+#     throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
+#           ^
+# Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+#     at new PrismaClient (C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\node_modules\\.prisma\\client\\default.js:43:11)
+#     at createPrismaRepositories (C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\src\\repositories\\prisma.repositories.ts:40:18)
+#     at <anonymous> (C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\src\\app.ts:36:30)
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.3
+# Subtest: tests\\api.smoke.test.ts
+not ok 1 - tests\\api.smoke.test.ts
+  ---
+  duration_ms: 729.8938
+  type: 'test'
+  location: 'C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\tests\\api.smoke.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\node_modules\\.prisma\\client\\default.js:43
+#     throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
+#           ^
+# Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+#     at new PrismaClient (C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\node_modules\\.prisma\\client\\default.js:43:11)
+#     at createPrismaRepositories (C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\src\\repositories\\prisma.repositories.ts:40:18)
+#     at <anonymous> (C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\src\\app.ts:36:30)
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+# Node.js v22.23.3
+# Subtest: tests\\auth.attacks.test.ts
+not ok 2 - tests\\auth.attacks.test.ts
+  ---
+  duration_ms: 720.1063
+  type: 'test'
+  location: 'C:\\Users\\PICHAU\\Desktop\\ESTUDOS\\ifpi\\2026-2\\PROGRAMA├ç├âO PARA INTERNET 2\\Atividade g\\ifpi-ads-2026.2-internet-ii\\topico3\\base-mini-prontuario-t3\\tests\\auth.attacks.test.ts:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 739.3811
+Ô£ÿ testes falharam
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 4/4 Segredos no reposit├│rio (gitleaks)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+9:09PM INF 2 commits scanned.
+9:09PM INF scanned ~863529 bytes (863.53 KB) in 189ms
+9:09PM INF no leaks found
+Ô£ö nenhum segredo detectado
+
+==============================================
+GATE VERMELHO Ô£ÿ ÔÇö 2 checagem(ns) falhando. N├úo entregue assim.

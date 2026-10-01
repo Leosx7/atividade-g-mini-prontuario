@@ -1,0 +1,5 @@
+
+> mini-prontuario-t3@3.0.0 db:seed
+> tsx scripts/seed-db.ts
+
+Seed Prisma aplicado: 8 pacientes, 5 atendimentos e 3 prescri├º├Áes fict├¡cias.

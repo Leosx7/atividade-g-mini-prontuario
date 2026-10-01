@@ -1,0 +1,9 @@
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": SQLite database "prontuario.db" at "file:../database/prontuario.db"
+
+- Introspecting based on datasource defined in prisma\schema.prisma
+ÔêÜ Introspected 3 models and wrote them into prisma\schema.prisma in 26ms
+      
+Run prisma generate to generate Prisma Client.
+

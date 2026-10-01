@@ -258,3 +258,163 @@ ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve n
 ==============================================
 GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
 ```
+
+## Tarefa: ORM-1..5 · Trilha: ORM · Rota: agente
+- **Ferramenta/modelo:** Codex no Work; revisão independente em contexto novo.
+- **Goal:** trocar SQLite direto por Prisma atrás dos mesmos ports, introspectar e mapear o banco, estabelecer baseline.
+- **Context:** ports da ARQ, prisma/LEIA-ME.md, INVARIANTES.md OP1, schema/seed históricos.
+- **Constraints:** não alterar services na troca ORM, nem smoke, frontend ou gate; não editar migration aplicada; sem novas bibliotecas.
+- **Done when:** gate inteiro verde, ports preservados, migrations aplicáveis em banco novo e formatos de API preservados.
+- **Plano editado?** init recusou a pasta prisma já existente; criado scaffold equivalente preservando LEIA-ME. A baseline foi marcada no banco anterior. A revisão automática rejeitou migrate reset nesse banco: adotado um novo prontuario-entrega.db com migrate deploy; o banco anterior permanece preservado. A criação do novo banco também evita carregar a diferença entre o índice UNIQUE implícito legado e o nome do índice gerado pelo Prisma. Não usar o banco legado com migrate dev sem planejamento de normalização.
+- **Falha registrada:** schema inicialmente sem chave final; validação impediu aplicação. Corrigido antes da baseline. Saída inicial em docs/evidencias/orm-gate-falha-inicial.txt; não ocultar erro.
+- **Revisão adversarial:** aceito P2: seed poderia anexar filhos fictícios a registros reais com IDs coincidentes; agora verifica identidade antes de gravar, dentro da transação. Aceitas sugestões de compartilhar DATABASE_URL com adapter SQLite, disponibilizar close e incluir migration_lock.toml. Não atualizar Prisma apenas por aviso de depreciação: a versão 6 é a versão fornecida e compatível; não há necessidade técnica de migração de versão nesta atividade. Esta triagem técnica é do agente, pendente de leitura crítica do aluno; não simular julgamento pessoal do aluno.
+- **O que EU decidi:** usuário aprovou migrations, AUTH, N3 e entrega completa. A alternativa não destrutiva foi escolhida pelo agente após bloqueio da revisão automática.
+- **Evidência de pronto:** gate revisado e migrations/deploy/introspecção em docs/evidencias/. Saída do gate reproduzida abaixo.
+
+```text
+
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 1/4 Tipos (tsc --noEmit)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Ô£ö tipos ok
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 2/4 Arquitetura (dependency-cruiser)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Ô£ö no dependency violations found (39 modules, 90 dependencies cruised)
+
+Ô£ö regras de depend├¬ncia respeitadas
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 3/4 Testes de API (node:test, servidor real em porta ef├¬mera)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+TAP version 13
+# Subtest: GET /api/health responde 200 ok
+ok 1 - GET /api/health responde 200 ok
+  ---
+  duration_ms: 87.9366
+  type: 'test'
+  ...
+# Subtest: GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+ok 2 - GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+  ---
+  duration_ms: 11.4261
+  type: 'test'
+  ...
+# Subtest: GET /api/patients/:id inexistente -> 404 no contrato de erro
+ok 3 - GET /api/patients/:id inexistente -> 404 no contrato de erro
+  ---
+  duration_ms: 4.9743
+  type: 'test'
+  ...
+# Subtest: POST /api/patients v├ílido -> 201 com id gerado
+ok 4 - POST /api/patients v├ílido -> 201 com id gerado
+  ---
+  duration_ms: 104.1261
+  type: 'test'
+  ...
+# Subtest: POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+ok 5 - POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+  ---
+  duration_ms: 4.6211
+  type: 'test'
+  ...
+# Subtest: POST /api/patients com CNS duplicado -> 409 (invariante N1)
+ok 6 - POST /api/patients com CNS duplicado -> 409 (invariante N1)
+  ---
+  duration_ms: 14.2583
+  type: 'test'
+  ...
+# Subtest: Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+ok 7 - Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+  ---
+  duration_ms: 17.3064
+  type: 'test'
+  ...
+# Subtest: Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+ok 8 - Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+  ---
+  duration_ms: 13.3504
+  type: 'test'
+  ...
+# Subtest: Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+ok 9 - Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+  ---
+  duration_ms: 20.4348
+  type: 'test'
+  ...
+# Subtest: Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+ok 10 - Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+  ---
+  duration_ms: 3.5121
+  type: 'test'
+  ...
+# Subtest: setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+ok 11 - setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem) # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 206.5802
+  type: 'test'
+  ...
+# Subtest: ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+ok 12 - ATAQUE 1 ÔÇö sem token: POST encounter -> 401 # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.2512
+  type: 'test'
+  ...
+# Subtest: ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+ok 13 - ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401 # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.0997
+  type: 'test'
+  ...
+# Subtest: ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+ok 14 - ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2) # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.1886
+  type: 'test'
+  ...
+# Subtest: ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+ok 15 - ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201 # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.0961
+  type: 'test'
+  ...
+# Subtest: ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+ok 16 - ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.1342
+  type: 'test'
+  ...
+# Subtest: ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.1479
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 7
+# todo 0
+# duration_ms 3496.5344
+Ô£ö testes verdes
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 4/4 Segredos no reposit├│rio (gitleaks)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+9:17PM INF 2 commits scanned.
+9:17PM INF scanned ~863529 bytes (863.53 KB) in 191ms
+9:17PM INF no leaks found
+Ô£ö nenhum segredo detectado
+
+==============================================
+GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
+```
