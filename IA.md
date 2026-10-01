@@ -1,0 +1,260 @@
+# Registro de uso de IA
+
+## Tarefa: diagnóstico inicial · Trilha: ARQ · Rota: agente
+
+- **Ferramenta/modelo:** Codex no Work. Identificador exato do modelo não informado.
+- **Tarefa (4 campos):**
+  - **Goal:** ler as regras e diagnosticar a base sem implementar TODOs.
+  - **Context:** PDFs Atividade-C-topico3-Arch-ORM-Auth.pdf e Conducao-atividade-C-topico3.pdf; README.md; AGENTS.md; INVARIANTES.md; prisma/LEIA-ME.md; fontes, schema, seed, testes, scripts e régua do projeto.
+  - **Constraints:** não alterar public/, tests/api.smoke.test.ts, gate.sh ou afrouxar .dependency-cruiser.cjs. Não implementar TODOs nem adicionar dependências ao projeto fora do escopo. Executar na pasta explicitamente autorizada pelo usuário.
+  - **Done when:** npm install, npm run db:reset, npm run dev e npm run gate executados; resultados e violações registrados, sem refatoração.
+- **Plano editado?** Sem implementação multi-arquivo. Houve ajuste de ambiente: Node 24 falhou na instalação nativa de better-sqlite3; foi usado Node 22 portátil na pasta diagnostico-tools, sem trocar a instalação global. Os PDFs já estavam na pasta da disciplina; o download pelo mecanismo de anexos falhou por acesso negado. pypdf foi preparado em pasta temporária, fora das dependências do projeto, somente para leitura.
+- **Base:** commit 0b3da239c9a1c402035b7e07787606f37a7f956b.
+- **Ambiente final:** Windows; Node v22.23.3; Bash do Git for Windows.
+- **Evidência de pronto:** trechos literais da saída real, abaixo. O gate inicial saiu com código 1; isto é diagnóstico de baseline, não entrega da trilha.
+
+### Instalação: tentativa inicial com Node 24 (falhou)
+```text
+npm error prebuild-install warn install No prebuilt binaries found (target=24.18.0 runtime=node arch=x64 libc= platform=win32)
+npm error gyp ERR! stack Error: Could not find any Visual Studio installation to use
+```
+
+### Instalação com Node 22 (código 0)
+```text
+added 238 packages, and audited 239 packages in 25s
+
+57 packages are looking for funding
+  run `npm fund` for details
+
+4 vulnerabilities (1 moderate, 3 high)
+```
+Não foi executado npm audit fix; dependências não foram atualizadas para corrigir alertas neste diagnóstico.
+
+### Banco e servidor
+```text
+Pacientes inseridos: 8
+Mini-Prontuário T3 no ar em http://localhost:3000
+```
+GET /api/health respondeu HTTP 200, corpo:
+```json
+{"status":"ok"}
+```
+O servidor de diagnóstico foi encerrado ao término. Os testes inserem dados e uma foto no banco/uploads gitignorados.
+
+### Gate: trechos reais (código 1)
+```text
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+✔ tipos ok
+
+  error services-nao-conhecem-a-web: src/services/medications.service.ts → node_modules/express/index.js
+  error controllers-nao-tocam-o-banco: src/controllers/encounters.controller.ts → src/database.ts
+
+x 2 dependency violations (2 errors, 0 warnings). 28 modules, 57 dependencies cruised.
+
+✘ violação da Regra da Dependência (veja acima)
+
+1..17
+# tests 17
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 7
+# todo 0
+# duration_ms 1042.9307
+✔ testes verdes
+
+⚠ gitleaks não instalado — checagem pulada (instale: https://github.com/gitleaks/gitleaks)
+  Regra da casa: checagem pulada NÃO conta como verde em entrega final.
+
+==============================================
+GATE VERMELHO ✘ — 1 checagem(ns) falhando. Não entregue assim.
+```
+- **Violações:** MedicationService importa Request de express e recebe a requisição HTTP; EncountersController importa database e executa SELECT. SQL nos demais services é o estado inicial documentado, ainda não proibido por ARQ-6.
+- **Integridade:** git status --short e git diff --stat estavam vazios antes da criação deste registro. Nenhum arquivo rastreado alterado pelo diagnóstico; package-lock.json permaneceu igual.
+- **Revisão adversarial:** não realizada nesta etapa; obrigatória por trilha quando houver implementação.
+- **O que EU decidi:** usuário autorizou mudar do requisito inicial de cloud para a pasta indicada no Windows; pediu somente diagnóstico e proposta, sem TODOs. Aprovação do plano de implementação permanece pendente. Não atribuir ao aluno decisões técnicas ou recusas que ele ainda não fez.
+
+## Proposta pendente: ARQ-1 — extrair Repository de Patient
+
+### Goal
+Criar src/repositories/patients.repository.ts com PatientsRepository e SqlitePatientsRepository. Mover todo SQL e a tradução snake_case → camelCase do Patient para o adapter. O service recebe o port e mantém as decisões de negócio.
+
+### Context
+AGENTS.md, INVARIANTES.md (A1 e N1), src/services/patients.service.ts, src/repositories/LEIA-ME.md, src/validation/patients.schemas.ts e a montagem existente. Métodos do port: findAll, findById, findByNationalId, create e updatePhoto. Preservar ordenação por nome, active boolean, photoUrl, CNS único/409 e paciente inexistente/404.
+
+### Constraints
+Primeiro produzir plano multi-arquivo para leitura, edição e aprovação do aluno, conforme Seção 4 do PDF da atividade. Não implementar enquanto o plano não tiver sido aprovado. Não tocar encounters, medications, routes, controllers, public/, tests/, schema.sql, migrations, gate.sh ou .dependency-cruiser.cjs. Sem novas bibliotecas. Adapter conhece database; service conhece apenas o contrato, com composição mínima na montagem existente. Não mudar contrato HTTP, erros ou regras de negócio. Não executar ARQ-2..6, ORM ou AUTH nesta tarefa.
+
+### Done when
+- npm run check com código 0.
+- npm run test: 10 smoke tests passam, 0 falhas, AUTH permanece não implementada; tests/ sem diff.
+- patients.service.ts sem SQL nem import de database ou implementação SQLite; recebe PatientsRepository.
+- adapter concentra SQL parametrizado e mapeamento de campos.
+- npm run gate executado e saída real registrada. Nesta etapa, deve continuar acusando SOMENTE as mesmas duas violações da baseline, sem novas violações. Gate completamente verde é a meta da trilha ARQ completa, após ARQ-4/5/6; não declarar ARQ-1 como entrega final.
+- Arquivos protegidos sem diff. Revisão do diff pelo aluno.
+
+**Ajuste necessário ao exemplo da condução:** a página 6 do PDF de condução pede uma violação a menos em ARQ-1, mas ambas as violações reais estão em MedicationService/EncountersController, expressamente fora do escopo de ARQ-1. O critério proposto preserva as duas até ARQ-4/5 e não afrouxa a régua. Gitleaks ausente permanece pendência para entrega final.
+
+**Registro após implementação:** anexar prompt integral aprovado, plano editado e motivo, saída real do gate, diff revisado, revisão adversarial e triagem quando houver, e decisões pessoais do aluno. Não inventar recusa ou aprovação.
+
+## Tarefa: ARQ-1..6 concluída · Trilha: ARQ · Rota: agente
+- **Ferramenta/modelo:** Codex no Work; revisão por agente em contexto novo.
+- **Goal:** extrair os três ports e adapters SQLite, eliminar as duas violações e acrescentar ARQ-6.
+- **Context:** AGENTS.md, INVARIANTES.md, sources existentes e plano integral apresentado na conversa.
+- **Constraints:** frontend, smoke, schema.sql e gate intocados; régua apenas reforçada; sem dependências novas; ports assíncronos para preservar o contrato na ORM.
+- **Done when:** tipos, arquitetura e smoke verdes; gate com gitleaks; diff protegido vazio.
+- **Plano editado?** O usuário aprovou integralmente o plano com "aprovo tudo" e retomou com "continue e me mandde no ponto de entregar". A implementação moveu a conexão para repositories/sqlite.database.ts, para cumprir ARQ-6 sem exceção para driver.
+- **Evidência de pronto:** saída integral em docs/evidencias/arq-gate-completo.txt, reproduzida abaixo.
+- **Revisão adversarial:** agente independente encontrou zero bugs concretos. Observação aceita: atualizar este registro, que ainda chamava ARQ de pendente. Nenhum achado artificial foi criado para simular taxa de recusa.
+- **O que EU decidi:** aprovação do plano e da implementação completa pelo usuário. A decisão de usar ports assíncronos foi proposta pelo agente; não atribuir julgamento de código ao aluno que ainda não o realizou.
+
+```text
+
+> mini-prontuario-t3@3.0.0 gate
+> bash gate.sh
+
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 1/4 Tipos (tsc --noEmit)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+Ô£ö tipos ok
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 2/4 Arquitetura (dependency-cruiser)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+Ô£ö no dependency violations found (31 modules, 70 dependencies cruised)
+
+Ô£ö regras de depend├¬ncia respeitadas
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 3/4 Testes de API (node:test, servidor real em porta ef├¬mera)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+TAP version 13
+# Subtest: GET /api/health responde 200 ok
+ok 1 - GET /api/health responde 200 ok
+  ---
+  duration_ms: 38.5556
+  type: 'test'
+  ...
+# Subtest: GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+ok 2 - GET /api/patients devolve lista em camelCase (formato do banco n├úo vaza)
+  ---
+  duration_ms: 5.6853
+  type: 'test'
+  ...
+# Subtest: GET /api/patients/:id inexistente -> 404 no contrato de erro
+ok 3 - GET /api/patients/:id inexistente -> 404 no contrato de erro
+  ---
+  duration_ms: 3.6745
+  type: 'test'
+  ...
+# Subtest: POST /api/patients v├ílido -> 201 com id gerado
+ok 4 - POST /api/patients v├ílido -> 201 com id gerado
+  ---
+  duration_ms: 192.89
+  type: 'test'
+  ...
+# Subtest: POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+ok 5 - POST /api/patients inv├ílido -> 400 com details por campo (Zod)
+  ---
+  duration_ms: 4.5832
+  type: 'test'
+  ...
+# Subtest: POST /api/patients com CNS duplicado -> 409 (invariante N1)
+ok 6 - POST /api/patients com CNS duplicado -> 409 (invariante N1)
+  ---
+  duration_ms: 14.9882
+  type: 'test'
+  ...
+# Subtest: Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+ok 7 - Encounters: lista do seed e cria├º├úo -> 200/201; paciente fantasma -> 404
+  ---
+  duration_ms: 27.7666
+  type: 'test'
+  ...
+# Subtest: Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+ok 8 - Medications: lista e cria├º├úo aninhadas no encounter -> 200/201; encounter fantasma -> 404
+  ---
+  duration_ms: 19.4975
+  type: 'test'
+  ...
+# Subtest: Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+ok 9 - Upload: PNG pequeno -> 200 com photoUrl; sem arquivo -> 422
+  ---
+  duration_ms: 25.9533
+  type: 'test'
+  ...
+# Subtest: Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+ok 10 - Upload: mimetype proibido -> 422 mesmo com extens├úo .jpg (filtro por conte├║do declarado)
+  ---
+  duration_ms: 3.3308
+  type: 'test'
+  ...
+# Subtest: setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem)
+ok 11 - setup: register dos dois pap├®is funciona (201 ou 409 se j├í existem) # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 229.9025
+  type: 'test'
+  ...
+# Subtest: ATAQUE 1 ÔÇö sem token: POST encounter -> 401
+ok 12 - ATAQUE 1 ÔÇö sem token: POST encounter -> 401 # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.2251
+  type: 'test'
+  ...
+# Subtest: ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401
+ok 13 - ATAQUE 2 ÔÇö token ADULTERADO: assinatura invalida -> 401 # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.0964
+  type: 'test'
+  ...
+# Subtest: ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2)
+ok 14 - ATAQUE 3 ÔÇö papel errado: recepcao tenta prescrever -> 403 (invariante N2) # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.0924
+  type: 'test'
+  ...
+# Subtest: ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201
+ok 15 - ATAQUE 4 ÔÇö recepcao consegue o que a matriz permite: criar paciente -> 201 # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.1742
+  type: 'test'
+  ...
+# Subtest: ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou
+ok 16 - ATAQUE 5 ÔÇö login com senha errada -> 401 SEM revelar qual campo errou # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.083
+  type: 'test'
+  ...
+# Subtest: ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A
+ok 17 - ATAQUE 6 ÔÇö regra de dom├¡nio: profissional B n├úo prescreve no atendimento do profissional A # SKIP trilha AUTH ainda n├úo implementada
+  ---
+  duration_ms: 0.1739
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 7
+# todo 0
+# duration_ms 10886.3482
+Ô£ö testes verdes
+
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+ÔûÂ 4/4 Segredos no reposit├│rio (gitleaks)
+ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+9:04PM INF 1 commits scanned.
+9:04PM INF scanned ~821370 bytes (821.37 KB) in 267ms
+9:04PM INF no leaks found
+Ô£ö nenhum segredo detectado
+
+==============================================
+GATE VERDE Ô£ö ÔÇö pronto para PR (cole ESTA sa├¡da como evid├¬ncia)
+```

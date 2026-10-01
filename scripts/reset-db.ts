@@ -8,7 +8,7 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { db, DATABASE_FILE } from "../src/database";
+import { db, DATABASE_FILE } from "../src/repositories/sqlite.database";
 
 const schema = readFileSync(join(process.cwd(), "database", "schema.sql"), "utf8");
 const seed = readFileSync(join(process.cwd(), "database", "seed.sql"), "utf8");

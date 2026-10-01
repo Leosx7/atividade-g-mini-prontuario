@@ -1,38 +1,35 @@
-/**
- * ============================================================
- * Montagem da aplicação — SEM subir servidor.
- * ------------------------------------------------------------
- * Separar `app` (a máquina) de `listen` (ligar a máquina) é o
- * que torna o servidor TESTÁVEL: os testes importam o app e o
- * sobem numa porta efêmera, sem tocar a porta 3000.
- * ============================================================
- */
 import express from "express";
-import { patientsRouter } from "./routes/patients.routes";
-import { encountersRouter } from "./routes/encounters.routes";
-import { medicationsRouter } from "./routes/medications.routes";
+import { createPatientsRouter } from "./routes/patients.routes";
+import { createEncountersRouter } from "./routes/encounters.routes";
+import { createMedicationsRouter } from "./routes/medications.routes";
 import { authRouter } from "./routes/auth.routes";
+import { createPatientsController } from "./controllers/patients.controller";
+import { createEncountersController } from "./controllers/encounters.controller";
+import { createMedicationsController } from "./controllers/medications.controller";
+import { PatientsService } from "./services/patients.service";
+import { EncountersService } from "./services/encounters.service";
+import { MedicationsService } from "./services/medications.service";
+import { SqlitePatientsRepository, type PatientsRepository } from "./repositories/patients.repository";
+import { SqliteEncountersRepository, type EncountersRepository } from "./repositories/encounters.repository";
+import { SqliteMedicationsRepository, type MedicationsRepository } from "./repositories/medications.repository";
 import { errorHandler } from "./middlewares/errorHandler";
 
-export const app = express();
-
-/* Middlewares globais — rodam antes das rotas, na ordem em que aparecem */
-app.use(express.json());
-app.use(express.static("public"));
-// As fotos enviadas ficam públicas em /uploads/<nome-gerado>.
-app.use("/uploads", express.static("uploads"));
-
-/* Saúde do serviço */
-app.get("/api/health", (_request, response) => {
-  response.json({ status: "ok" });
-});
-
-/* Recursos */
-app.use("/api/auth", authRouter);
-app.use("/api/patients", patientsRouter);
-app.use("/api/patients/:id/encounters", encountersRouter);
-app.use("/api/encounters/:encounterId/medications", medicationsRouter);
-
-/* O tratador de erros entra POR ÚLTIMO — depois de todas as rotas.
-   Registrado antes, ele nunca vê os erros que nascem depois dele. */
-app.use(errorHandler);
+export type Repositories = { patients: PatientsRepository; encounters: EncountersRepository; medications: MedicationsRepository };
+// A composição injeta os adapters; os services dependem somente dos ports.
+export function createApp(repositories: Repositories) {
+  const app = express();
+  const patients = new PatientsService(repositories.patients);
+  const encounters = new EncountersService(repositories.encounters, patients);
+  const medications = new MedicationsService(repositories.medications, encounters);
+  app.use(express.json());
+  app.use(express.static("public"));
+  app.use("/uploads", express.static("uploads"));
+  app.get("/api/health", (_request, response) => { response.json({ status: "ok" }); });
+  app.use("/api/auth", authRouter);
+  app.use("/api/patients", createPatientsRouter(createPatientsController(patients)));
+  app.use("/api/patients/:id/encounters", createEncountersRouter(createEncountersController(encounters)));
+  app.use("/api/encounters/:encounterId/medications", createMedicationsRouter(createMedicationsController(medications)));
+  app.use(errorHandler);
+  return app;
+}
+export const app = createApp({ patients: new SqlitePatientsRepository(), encounters: new SqliteEncountersRepository(), medications: new SqliteMedicationsRepository() });

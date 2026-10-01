@@ -21,6 +21,13 @@
 module.exports = {
   forbidden: [
     {
+      name: "so-repositories-importam-o-driver",
+      comment: "ARQ-6: somente adapters de persistência conhecem o driver.",
+      severity: "error",
+      from: { path: "^src/(?!repositories/)" },
+      to: { path: "^src/database|^src/repositories/(sqlite\\.database|prisma\\.client)|^node_modules/(better-sqlite3|@prisma)(/|$)" },
+    },
+    {
       name: "rotas-so-conhecem-controllers",
       comment:
         "Uma rota roteia. Se ela importa service ou banco, a fronteira Route/Controller vazou.",

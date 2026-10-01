@@ -1,18 +1,8 @@
-/**
- * Controller de MedicationRequest.
- */
 import type { Request, Response } from "express";
-import * as medicationsService from "../services/medications.service";
-
-export function listByEncounter(request: Request, response: Response) {
-  const medications = medicationsService.listMedicationsByEncounter(request);
-  response.status(200).json(medications);
-}
-
-export function create(request: Request, response: Response) {
-  const created = medicationsService.createMedication(
-    Number(request.params.encounterId),
-    request.body,
-  );
-  response.status(201).json(created);
+import type { MedicationsService } from "../services/medications.service";
+export function createMedicationsController(service: MedicationsService) {
+  return {
+    async listByEncounter(request: Request, response: Response) { response.status(200).json(await service.listMedicationsByEncounter(Number(request.params.encounterId))); },
+    async create(request: Request, response: Response) { response.status(201).json(await service.createMedication(Number(request.params.encounterId), request.body)); },
+  };
 }
