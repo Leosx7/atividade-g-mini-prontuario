@@ -1,17 +1,6 @@
-/**
- * ============================================================
- * Testes de ATAQUE da trilha AUTH — eles ligam sozinhos.
- * ------------------------------------------------------------
- * Enquanto POST /api/auth/login responder 404 (trilha AUTH ainda
- * não construída), a suíte inteira é PULADA e o gate segue verde.
- * No momento em que o login nascer, estes testes acordam — e o
- * seu "Done when" da trilha AUTH é: TODOS verdes.
- *
- * Cada teste aqui é um item do OWASP aplicado:
- *   A07 (Identification and Authentication Failures) -> 401s
- *   A01 (Broken Access Control, o nº 1 da lista)     -> 403s
- * ============================================================
- */
+/** Ataques AUTH obrigatórios: servidor protegido real, zero SKIP.
+ * As expectativas originais foram mantidas; o harness mudou para a composição
+ * autenticada. Ausência de login falha, em vez de ocultar testes. */
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import type { Server } from "node:http";

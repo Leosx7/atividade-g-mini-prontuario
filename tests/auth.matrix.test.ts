@@ -39,7 +39,7 @@ test("matriz completa de leitura, criação, upload e prescrição", async () =>
     assert.equal((await requestAs(role, "/api/patients/1/encounters")).status, 200);
     assert.equal((await requestAs(role, "/api/patients", { name: `Matriz ${role}`, birthDate: "1990-01-01", nationalId: randomCns() })).status, 201);
     const form = new FormData();
-    form.append("photo", new Blob([new Uint8Array([137, 80, 78, 71])], { type: "image/png" }), "matrix.png");
+    form.append("photo", new Blob([new Uint8Array(Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64"))], { type: "image/png" }), "matrix.png");
     assert.equal((await fetch(`${base}/api/patients/2/photo`, { method: "POST", headers: { Authorization: `Bearer ${sessions.get(role)!.token}` }, body: form })).status, 200);
     assert.equal((await requestAs(role, "/api/encounters/1/medications")).status, role === "recepcao" ? 403 : 200);
     const encounter = await requestAs(role, "/api/patients/1/encounters", { startedAt: "2026-09-30T10:00", chiefComplaint: "Matriz" });

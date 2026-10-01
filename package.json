@@ -12,7 +12,11 @@
     "test": "tsx --test tests/*.test.ts",
     "gate": "bash gate.sh",
     "setup": "tsx scripts/setup-env.ts",
-    "db:seed": "tsx scripts/seed-db.ts"
+    "db:seed": "tsx scripts/seed-db.ts",
+    "test:memory": "tsx scripts/test-memory.ts",
+    "db:deploy": "prisma migrate deploy",
+    "db:generate": "prisma generate",
+    "verify:requests": "tsx scripts/verify-requests.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.16.1",

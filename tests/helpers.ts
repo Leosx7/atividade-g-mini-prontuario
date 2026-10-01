@@ -1,16 +1,13 @@
 import type { Server } from "node:http";
 import { createApp } from "../src/app";
 export async function startServer(options: { auth?: boolean } = {}): Promise<{ base: string; server: Server }> {
-  let application;
-  if (options.auth) {
-    // Mesma montagem usada pelo servidor; não há bypass de autenticação.
-    const { createProductionApplication } = await import("../src/composition");
-    application = createProductionApplication();
-  } else {
-    const { createPrismaRepositories } = await import("../src/repositories/prisma.repositories");
-    const repositories = createPrismaRepositories();
-    application = { app: createApp(repositories), close: repositories.close };
-  }
+  // Somente o harness lê TEST_PERSISTENCE; server.ts não tem modo aberto/memória.
+  const repositories = process.env.TEST_PERSISTENCE === "memory"
+    ? (await import("../src/repositories/memory.repositories")).createMemoryRepositories()
+    : (await import("../src/repositories/prisma.repositories")).createPrismaRepositories();
+  const application = options.auth
+    ? (await import("../src/composition")).createProductionApplication(repositories)
+    : { app: createApp(repositories), close: repositories.close };
   return new Promise(resolve => {
     const server = application.app.listen(0, () => {
       const address = server.address();

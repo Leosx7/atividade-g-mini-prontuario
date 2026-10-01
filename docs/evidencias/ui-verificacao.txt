@@ -1,0 +1,2 @@
+Frontend original: login apareceu sem altera├º├úo em public/.
+Login real no Chrome: crach├í profissional e lista de pacientes confirmados.

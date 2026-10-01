@@ -1,13 +1,14 @@
+import type { UsersRepository } from "./repositories/users.repository";
 import "dotenv/config";
-import { createApp } from "./app";
+import { createApp, type Repositories } from "./app";
 import { createPrismaRepositories } from "./repositories/prisma.repositories";
 import { AuthService } from "./services/auth.service";
 import type { SignOptions } from "jsonwebtoken";
-export function createProductionApplication() {
+export function createProductionApplication(injected?: Repositories & { users: UsersRepository; close: () => Promise<void> }) {
   const secret = process.env.JWT_SECRET ?? "";
   const expiresIn = process.env.JWT_EXPIRES_IN ?? "15m";
   if (!/^\d+(s|m|h|d)$/.test(expiresIn)) throw new Error("JWT_EXPIRES_IN deve ser duração como 15m ou 5s.");
-  const repositories = createPrismaRepositories();
+  const repositories = injected ?? createPrismaRepositories();
   const authentication = { service: new AuthService(repositories.users, secret, expiresIn as SignOptions["expiresIn"]), secret };
   return { app: createApp(repositories, authentication), close: repositories.close };
 }

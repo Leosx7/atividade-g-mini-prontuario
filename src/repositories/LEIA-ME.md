@@ -1,22 +1,5 @@
-# repositories/ — a pasta que a trilha ARQ vai povoar
+# Repositories — trilhas concluídas
 
-Hoje ela está vazia de propósito. O SQL mora nos services — e é
-exatamente essa mistura ("decidir" + "buscar") que a trilha ARQ
-desfaz.
+Os ports de Patient, Encounter, Medication e User ficam nos arquivos *.repository.ts e são assíncronos. Services recebem esses contratos. Os adapters *.sqlite.ts preservam o motor legado; prisma.repositories.ts é a persistência do servidor; memory.repositories.ts demonstra o N3.
 
-Cada recurso ganhará um arquivo aqui com **duas coisas**:
-
-1. A **interface** (o *port*): `PatientsRepository`,
-   `EncountersRepository`, `MedicationsRepository` — o contrato
-   que o service enxerga.
-2. A **implementação SQLite** (o *adapter*):
-   `SqlitePatientsRepository` etc. — o único lugar do sistema que
-   pode importar `src/database`.
-
-Na trilha ORM, cada adapter ganha um irmão gêmeo em Prisma — e a
-prova de que a arquitetura funcionou é o service **não perceber a
-troca**.
-
-Quando esta pasta existir, feche a trilha com o TODO ARQ-6:
-a checagem de arquitetura (`.dependency-cruiser.cjs`) ganha a
-regra que torna esta fronteira permanente.
+Somente esta pasta importa driver/client. A composição escolhe adapters; banco interno nunca vaza no JSON. memory recebe cópias dos fixtures, preserva unicidade/referências e não substitui testes de SQL real. Seed seguro aborta colisões de identidade. Regras executáveis: npm run arch.

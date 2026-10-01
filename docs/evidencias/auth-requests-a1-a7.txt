@@ -1,0 +1,8 @@
+A1 registro: HTTP 201; esperado 201
+A2 login: HTTP 200; esperado 200
+A3 sem token: HTTP 401; esperado 401
+A4 token adulterado: HTTP 401; esperado 401
+apoio registro recep├º├úo: HTTP 201; esperado 201
+A5 recep├º├úo prescreve: HTTP 403; esperado 403
+A6 senha incorreta: HTTP 401; esperado 401
+A7 token expirado: HTTP 401; esperado 401
